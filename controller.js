@@ -2,6 +2,9 @@ let requestData = require('./request-data');
 let fs = require('fs');
 
 exports.controler = (allLinks, mediumLinks) => {
+    //This function takes the allLinks list to be used to add other links.
+    // mediumLinks is list of links which contains medium.com as domain
+    //It returns new promise which is resolved when all the links are collected.
     return new Promise((resolve, reject) => {
         let activeConnections = 0;
         let linkCounter = 0;
