@@ -35,3 +35,46 @@ exports.controler = (allLinks, mediumLinks) => {
         }
     })
 }
+
+let newActiveConnections = 0;
+let allLinksGlobal = [];
+let numberOfLinksToCheck = 10;
+let linkCounter = 0;
+let linksResolved = 0;
+exports.recursiveControler = (allLinks, mediumLinks) => {
+    return new Promise((resolve, reject) => {
+        var recursiveMethod = (mediumLinks) => {
+            //This is the recursive method which will take medium link list as argument
+            //It makes the recursive call by removing one links 
+            //and pass other links to next call
+            if (newActiveConnections < 5) {
+                if (mediumLinks.length && linkCounter < numberOfLinksToCheck) {
+                    //there are links and make recursive call at the end
+                    requestData.requestByLink(mediumLinks.pop())
+                        .then((result) => {
+                            allLinksGlobal = [...allLinksGlobal, ...result.allLinks];
+                            newActiveConnections--;
+                            linksResolved++;
+                            if (linksResolved === numberOfLinksToCheck) {
+                                resolve(allLinksGlobal);
+                            }
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        })
+                    newActiveConnections++;
+                    linkCounter++;
+                    recursiveMethod(mediumLinks);
+                }
+            }
+            else {
+                setTimeout(() => {
+                    recursiveMethod(mediumLinks);
+                }, 100)
+            }
+        }
+        allLinksGlobal = [...allLinks];
+        recursiveMethod(mediumLinks);
+    });
+
+}

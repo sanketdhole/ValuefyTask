@@ -3,16 +3,17 @@ let fs = require('fs');
 let path = require('path');
 
 let requestData = require('./request-data');
-let controller = require('./controler');
+let controller = require('./controller');
 
 let mediumLinks = [];
 let allLinks = [];
 
 requestData.requestByLink('https://medium.com')
-    .then((allLinksTemp, mediumLinksTemp) => {
-        allLinks = allLinksTemp;
-        mediumLinks = mediumLinksTemp;
-        controller.controler(allLinks, mediumLinks)
+    .then((result) => {
+        // it makes the first request and extract all the links
+        allLinks = result.allLinks;
+        mediumLinks = result.mediumLinks;
+        controller.recursiveControler(allLinks, mediumLinks)
             .then(finalLinkList => {
                 fs.writeFile(
                     path.join(__dirname, 'data', 'links.json'),
