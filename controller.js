@@ -38,7 +38,7 @@ exports.controler = (allLinks, mediumLinks) => {
 
 let newActiveConnections = 0;
 let allLinksGlobal = [];
-let numberOfLinksToCheck = 10;
+let numberOfLinksToCheck = 10; // number of links to be checked.
 let linkCounter = 0;
 let linksResolved = 0;
 exports.recursiveControler = (allLinks, mediumLinks) => {
